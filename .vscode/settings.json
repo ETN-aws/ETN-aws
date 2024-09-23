@@ -1,0 +1,6 @@
+{
+    "python.analysis.extraPaths": [
+        "./aws-iot-device-sdk-python-v2-main/samples/utils",
+        "./aws-iot-device-sdk-python-v2-main/samples"
+    ]
+}
