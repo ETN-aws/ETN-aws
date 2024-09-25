@@ -26,11 +26,11 @@ def_topic = config.get('TOPIC', 'def_topic')
 Certificate_filePath = config.get('PATH','Certificate_filePath')
 Key_filePath = config.get('PATH','Key_filePath')
 
-GetState = config.get('DEFAULT','GetState') 
+GetState = config.getboolean('DEFAULT','GetState') 
 StateStartRange = config.get('DEFAULT','StateStartRange')
 StateEndRange = config.get('DEFAULT','StateEndRange')
 
-GetPrice = config.get('DEFAULT','GetPrice') 
+GetPrice = config.getboolean('DEFAULT','GetPrice') 
 PriceStartRange = config.get('DEFAULT','PriceStartRange')
 PriceEndRange = config.get('DEFAULT','PriceEndRange')
 # END CONFIG #
