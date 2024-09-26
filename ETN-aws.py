@@ -26,13 +26,21 @@ def_topic = config.get('TOPIC', 'def_topic')
 Certificate_filePath = config.get('PATH','Certificate_filePath')
 Key_filePath = config.get('PATH','Key_filePath')
 
-GetState = config.get('DEFAULT','GetState') 
+MarkerState = config.get('DEFAULT','MarkerState')
+GetState = config.getboolean('DEFAULT','GetState') 
 StateStartRange = config.get('DEFAULT','StateStartRange')
 StateEndRange = config.get('DEFAULT','StateEndRange')
 
-GetPrice = config.get('DEFAULT','GetPrice') 
+MarkerPrice = config.get('DEFAULT','MarkerPrice')
+GetPrice = config.getboolean('DEFAULT','GetPrice') 
 PriceStartRange = config.get('DEFAULT','PriceStartRange')
 PriceEndRange = config.get('DEFAULT','PriceEndRange')
+
+# Custom section prepared
+# MarkerCustom = config.get('DEFAULT','MarkerCustom')
+# GetCustom = config.getboolean('DEFAULT','GetCustom') 
+# CustomStartRange = config.get('DEFAULT','CustomStartRange')
+# CustomEndRange = config.get('DEFAULT','CustomEndRange')
 # END CONFIG #
 
 
@@ -117,12 +125,19 @@ def main_prog(client):
         my_dict = json.load(f)
     f.close
         
+    # Prepared custom section
+    # with open('custom.json', 'r') as f:
+    #     my_custom = json.load(f)
+    # f.close
+    
     counter = 0
     price = []
     state = []
+    # custom = []
     for i in range(100):
         price.append(i)
         state.append(i)
+    #    custom.append(i)
     
     for i in my_dict["value"]:
         rce_pln = int(i["rce_pln"])
@@ -145,12 +160,12 @@ def main_prog(client):
     counter=0
     for x in range(int(StateStartRange),int(StateEndRange)):
         counter+=1
-        my_states['state']['desired']["M"+str(x)]=state[counter]
+        my_states['state']['desired'][MarkerState+str(x)]=state[counter] # -> "M":0, ....
     
     counter=0
     for x in range(int(PriceStartRange),int(PriceEndRange)):
         counter+=1
-        my_prices['state']['desired']["MW"+str(x)]=price[counter]
+        my_prices['state']['desired'][MarkerPrice+str(x)]=price[counter] # -> "MD":1234, ....
 
     with open('prices.json','w') as f:
         json.dump(my_prices,f)
@@ -189,13 +204,13 @@ if __name__ == '__main__':
     lifecycle_connect_success_data = future_connection_success.result(TIMEOUT)
     connack_packet = lifecycle_connect_success_data.connack_packet
     negotiated_settings = lifecycle_connect_success_data.negotiated_settings
-
     while(True):
+        
         if do_once:
             setup_json()
             main_prog(client)
             do_once=False
-            
-        if (minute()==0 or int(minute())%15==0) and int(second())>0:
+
+        if int(minute())%15==0 and int(second())>1:
             main_prog(client)
             sleep(60)

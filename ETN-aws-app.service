@@ -1,0 +1,13 @@
+[Unit]
+Description=ETN AWS App
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/home/ubuntu/etn-aws
+ExecStart=/usr/bin/python3 /home/ubuntu/etn-aws/ETN-aws.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
